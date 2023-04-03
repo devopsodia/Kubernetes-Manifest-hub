@@ -1,0 +1,16 @@
+apiVersion: v1 #service-v1, replicaset/Deployment-app/v1
+kind: Pod
+metadata:
+  name: myapp-pod-taint
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  containers:
+    - name: nginx-app-cont
+      image: nginx
+  tolerations:
+   - key: "app"
+     operator: "Equal"
+     value: "backend"
+     effect: "NoSchedule"

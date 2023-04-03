@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: shanviapp-svc
+  labels:
+    app: shanviapp
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+ #    nodePort: 30008
+  selector:
+    app: shanviapp

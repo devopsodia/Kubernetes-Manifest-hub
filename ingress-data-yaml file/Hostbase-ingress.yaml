@@ -1,0 +1,118 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: ing-shanvi
+spec:
+  rules:
+  - host: shanvi.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: shanviapp-svc
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: ing-devopsodia
+spec:
+  rules:
+  - host: devopsodia.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: devopsodia-svc
+            port:
+              number: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-shanviapp
+  # namespace: myapp
+  labels:
+    app: shanviapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shanviapp
+  template:
+    metadata:
+      labels:
+        app: shanviapp
+    spec:
+      containers:
+      - name: container-shanviapp
+        image: srikanta1219/shanvi:16
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-devopsodia
+  # namespace: myapp
+  labels:
+    app: devopsodia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devopsodia
+  template:
+    metadata:
+      labels:
+        app: devopsodia
+    spec:
+      containers:
+      - name: container-devopsodia
+        image: srikanta1219/project-sri-second:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shanviapp-svc
+  #  namespace: myapp
+  labels:
+    app: shanviapp
+spec:
+  #type: LoadBalancer
+  #type: NodePort
+  ports:
+  - port: 80
+   #nodePort: 30001
+  selector:
+    app: shanviapp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devopsodia-svc
+  #  namespace: myapp
+  labels:
+    app: devopsodia
+spec:
+  #type: LoadBalancer
+  #type: NodePort
+  ports:
+  - port: 8080
+   #nodePort: 30002
+  selector:
+    app: devopsodia

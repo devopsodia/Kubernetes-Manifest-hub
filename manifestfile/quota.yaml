@@ -1,0 +1,18 @@
+apiVersion: v1 #service-v1, replicaset/Deployment-app/v1
+kind: Pod
+metadata:
+  name: rahul-quota-pod
+  labels:
+    app: rahul-quota
+    type: front-end-quota
+spec:
+  containers:
+    - name: app-cont-quota
+      image: nginx
+      resources:
+        requests:
+          memory: 128m
+          cpu: "500m"
+        limits:
+          memory: 1Gi
+          cpu: "2"
